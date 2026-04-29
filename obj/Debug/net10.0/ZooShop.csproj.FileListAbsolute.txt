@@ -1,0 +1,14 @@
+C:\Users\User\CSProjeckts\ZooShop\bin\Debug\net10.0\ZooShop.exe
+C:\Users\User\CSProjeckts\ZooShop\bin\Debug\net10.0\ZooShop.deps.json
+C:\Users\User\CSProjeckts\ZooShop\bin\Debug\net10.0\ZooShop.runtimeconfig.json
+C:\Users\User\CSProjeckts\ZooShop\bin\Debug\net10.0\ZooShop.dll
+C:\Users\User\CSProjeckts\ZooShop\bin\Debug\net10.0\ZooShop.pdb
+C:\Users\User\CSProjeckts\ZooShop\obj\Debug\net10.0\ZooShop.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\CSProjeckts\ZooShop\obj\Debug\net10.0\ZooShop.AssemblyInfoInputs.cache
+C:\Users\User\CSProjeckts\ZooShop\obj\Debug\net10.0\ZooShop.AssemblyInfo.cs
+C:\Users\User\CSProjeckts\ZooShop\obj\Debug\net10.0\ZooShop.csproj.CoreCompileInputs.cache
+C:\Users\User\CSProjeckts\ZooShop\obj\Debug\net10.0\ZooShop.dll
+C:\Users\User\CSProjeckts\ZooShop\obj\Debug\net10.0\refint\ZooShop.dll
+C:\Users\User\CSProjeckts\ZooShop\obj\Debug\net10.0\ZooShop.pdb
+C:\Users\User\CSProjeckts\ZooShop\obj\Debug\net10.0\ZooShop.genruntimeconfig.cache
+C:\Users\User\CSProjeckts\ZooShop\obj\Debug\net10.0\ref\ZooShop.dll

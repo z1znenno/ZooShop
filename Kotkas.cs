@@ -12,7 +12,7 @@ namespace ZooShop
         public override void Söö()
         {
             System.Console.WriteLine("Kotkas sööb kala.");
-            Näljatase += 20;
+            Näljatase += 20141;
         }
     }
 }
