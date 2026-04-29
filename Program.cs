@@ -2,95 +2,35 @@
 {
     class Program
     {
+        // ── Цвета темы ──────────────────────────────────────────────
+        static readonly ConsoleColor CLR_ACCENT  = ConsoleColor.Cyan;
+        static readonly ConsoleColor CLR_TITLE   = ConsoleColor.White;
+        static readonly ConsoleColor CLR_SUCCESS = ConsoleColor.Green;
+        static readonly ConsoleColor CLR_ERROR   = ConsoleColor.Red;
+        static readonly ConsoleColor CLR_MUTED   = ConsoleColor.DarkGray;
+        static readonly ConsoleColor CLR_INPUT   = ConsoleColor.Yellow;
+
         static void Main(string[] args)
         {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            Console.Title = "🐾 ZooShop";
+
             List<Loom> loomad = new List<Loom>();
             bool jookseb = true;
 
             while (jookseb)
             {
-                Console.WriteLine("\nVali loom: 1 - Imetaja, 2 - Lind, 0 - Välju");
-                string valik = Console.ReadLine()?.Trim() ?? "";
+                DrawMainMenu(loomad.Count);
+                string valik = ReadInput("");
 
                 switch (valik)
                 {
                     case "1":
-                        try
-                        {
-                            Imetaja imetaja = new Imetaja();
-
-                            Console.WriteLine("Sisesta imetaja nimi:");
-                            imetaja.Nimi = Console.ReadLine();
-                            if (string.IsNullOrWhiteSpace(imetaja.Nimi))
-                                throw new ArgumentException("Nimi ei tohi olla tühi!");
-
-                            Console.WriteLine("Sisesta imetaja vanus:");
-                            imetaja.Vanus = int.Parse(Console.ReadLine());
-                            if (imetaja.Vanus <= 0)
-                                throw new ArgumentOutOfRangeException("Vanus peab olema positiivne arv!");
-
-                            Console.WriteLine("Sisesta imetaja näljatase (0-100):");
-                            imetaja.Näljatase = int.Parse(Console.ReadLine());
-                            if (imetaja.Näljatase < 0 || imetaja.Näljatase > 100)
-                                throw new ArgumentOutOfRangeException("Näljatase peab olema vahemikus 0-100!");
-
-                            Console.WriteLine("Sisesta imetaja karvavärvus:");
-                            imetaja.Karvavärvus = Console.ReadLine();
-                            if (string.IsNullOrWhiteSpace(imetaja.Karvavärvus))
-                                throw new ArgumentException("Karvavärvus ei tohi olla tühi!");
-
-                            loomad.Add(imetaja);
-                            Console.WriteLine($"Imetaja '{imetaja.Nimi}' lisatud!");
-                        }
-                        catch (FormatException)
-                        {
-                            Console.WriteLine("Viga: vanus ja näljatase peavad olema täisarvud!");
-                        }
-                        catch (ArgumentOutOfRangeException ex)
-                        {
-                            Console.WriteLine($"Viga: {ex.ParamName}");
-                        }
-                        catch (ArgumentException ex)
-                        {
-                            Console.WriteLine($"Viga: {ex.Message}");
-                        }
+                        AddImetaja(loomad);
                         break;
 
                     case "2":
-                        try
-                        {
-                            Lind lind = new Lind();
-
-                            Console.WriteLine("Sisesta linnu nimi:");
-                            lind.Nimi = Console.ReadLine();
-                            if (string.IsNullOrWhiteSpace(lind.Nimi))
-                                throw new ArgumentException("Nimi ei tohi olla tühi!");
-
-                            Console.WriteLine("Sisesta linnu vanus:");
-                            lind.Vanus = int.Parse(Console.ReadLine());
-                            if (lind.Vanus <= 0)
-                                throw new ArgumentOutOfRangeException("Vanus peab olema positiivne arv!");
-
-                            Console.WriteLine("Sisesta linnu tiivaulatus:");
-                            lind.Tiivaulatus = Console.ReadLine();
-                            if (string.IsNullOrWhiteSpace(lind.Tiivaulatus))
-                                throw new ArgumentException("Tiivaulatus ei tohi olla tühi!");
-
-                            loomad.Add(lind);
-                            Console.WriteLine($"Lind '{lind.Nimi}' lisatud!");
-                        }
-                        catch (FormatException)
-                        {
-                            Console.WriteLine("Viga: vanus peab olema täisarv!");
-                        }
-                        catch (ArgumentOutOfRangeException ex)
-                        {
-                            Console.WriteLine($"Viga: {ex.ParamName}");
-                        }
-                        catch (ArgumentException ex)
-                        {
-                            Console.WriteLine($"Viga: {ex.Message}");
-                        }
+                        AddLind(loomad);
                         break;
 
                     case "0":
@@ -98,24 +38,236 @@
                         break;
 
                     default:
-                        Console.WriteLine("Vale valik, proovi uuesti.");
+                        ShowError("Vale valik! Sisesta 0, 1 või 2.");
+                        Pause();
                         break;
                 }
             }
 
-            if (loomad.Count == 0)
+            FeedAll(loomad);
+        }
+
+        // ── Главное меню ─────────────────────────────────────────────
+        static void DrawMainMenu(int count)
+        {
+            Console.Clear();
+            DrawBox(new[]
             {
-                Console.WriteLine("\nNimekirjas pole ühtegi looma.");
-                return;
+                "  ██████  ██████   ██████  ",
+                "     ██  ██    ██ ██    ██ ",
+                "    ██   ██    ██ ██    ██ ",
+                "   ██    ██    ██ ██    ██ ",
+                "  ██████  ██████   ██████  ",
+            }, CLR_ACCENT);
+
+            Write("  ", CLR_MUTED);
+            Write("ZooShop", CLR_TITLE);
+            Write(" — loomade haldussüsteem\n", CLR_MUTED);
+            DrawLine();
+
+            WriteLn($"  Nimekirjas: ", CLR_MUTED);
+            Write($"{count}", CLR_ACCENT);
+            Write(" looma\n", CLR_MUTED);
+            DrawLine();
+
+            DrawMenuItem("1", "Imetaja", "Lisa uus imetaja");
+            DrawMenuItem("2", "Lind",    "Lisa uus lind");
+            DrawLine();
+            DrawMenuItem("0", "Välju",   "Söödamine ja väljumine");
+            DrawLine();
+
+            Write("\n  Valik → ", CLR_INPUT);
+        }
+
+        static void DrawMenuItem(string key, string label, string desc)
+        {
+            Write("  [", CLR_MUTED);
+            Write(key, CLR_ACCENT);
+            Write("]  ", CLR_MUTED);
+            Write($"{label,-10}", CLR_TITLE);
+            Write($"  {desc}\n", CLR_MUTED);
+        }
+
+        // ── Добавление imetaja ───────────────────────────────────────
+        static void AddImetaja(List<Loom> loomad)
+        {
+            Console.Clear();
+            DrawHeader("UUS IMETAJA", ConsoleColor.Cyan);
+
+            try
+            {
+                Imetaja imetaja = new Imetaja();
+
+                imetaja.Nimi        = AskString("Nimi");
+                imetaja.Vanus       = AskInt("Vanus (aastates)", 1, 100);
+                imetaja.Näljatase   = AskInt("Näljatase", 0, 100);
+                imetaja.Karvavärvus = AskString("Karvavärvus");
+
+                loomad.Add(imetaja);
+                ShowSuccess($"✓  Imetaja '{imetaja.Nimi}' edukalt lisatud!");
+            }
+            catch (FormatException)
+            {
+                ShowError("Viga: arv sisestati valesti!");
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                ShowError($"Viga: {ex.ParamName}");
+            }
+            catch (ArgumentException ex)
+            {
+                ShowError($"Viga: {ex.Message}");
             }
 
-            Console.WriteLine("\nLoomade söödamine:");
-            foreach (Loom loom in loomad)
+            Pause();
+        }
+
+        // ── Добавление lind ──────────────────────────────────────────
+        static void AddLind(List<Loom> loomad)
+        {
+            Console.Clear();
+            DrawHeader("UUS LIND", ConsoleColor.Cyan);
+
+            try
             {
-                Console.WriteLine($"\n{loom.Nimi} ({loom.GetType().Name}) sööb:");
-                Console.WriteLine($"Näljatase: {loom.GetTervislikuSeisund()}");
-                loom.Söö();
+                Lind lind = new Lind();
+
+                lind.Nimi        = AskString("Nimi");
+                lind.Vanus       = AskInt("Vanus (aastates)", 1, 100);
+                lind.Tiivaulatus = AskString("Tiivaulatus");
+
+                loomad.Add(lind);
+                ShowSuccess($"✓  Lind '{lind.Nimi}' edukalt lisatud!");
             }
+            catch (FormatException)
+            {
+                ShowError("Viga: arv sisestati valesti!");
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                ShowError($"Viga: {ex.ParamName}");
+            }
+            catch (ArgumentException ex)
+            {
+                ShowError($"Viga: {ex.Message}");
+            }
+
+            Pause();
+        }
+
+        // ── Кормёжка всех ────────────────────────────────────────────
+        static void FeedAll(List<Loom> loomad)
+        {
+            Console.Clear();
+            DrawHeader("LOOMADE SÖÖDAMINE", ConsoleColor.Green);
+
+            if (loomad.Count == 0)
+            {
+                Write("\n  ", CLR_MUTED);
+                WriteLn("Nimekirjas pole ühtegi looma.", CLR_MUTED);
+            }
+            else
+            {
+                foreach (Loom loom in loomad)
+                {
+                    DrawLine();
+                    Write("  ", default);
+                    Write($"▶  {loom.Nimi}", CLR_TITLE);
+                    Write($"  ({loom.GetType().Name})\n", CLR_MUTED);
+                    Write("     Näljatase : ", CLR_MUTED);
+                    WriteLn(loom.GetTervislikuSeisund(), CLR_ACCENT);
+                    Write("     ", default);
+                    loom.Söö();
+                }
+            }
+
+            DrawLine();
+            Write("\n  ", CLR_MUTED);
+            WriteLn("Programm lõpetatud. Head aega! 🐾\n", CLR_MUTED);
+        }
+
+        // ── Валидация ввода ──────────────────────────────────────────
+        static string AskString(string label)
+        {
+            Write($"\n  {label}: ", CLR_INPUT);
+            string val = Console.ReadLine()?.Trim() ?? "";
+            if (string.IsNullOrEmpty(val))
+                throw new ArgumentException($"{label} ei tohi olla tühi!");
+            return val;
+        }
+
+        static int AskInt(string label, int min, int max)
+        {
+            Write($"\n  {label} ({min}–{max}): ", CLR_INPUT);
+            string raw = Console.ReadLine()?.Trim() ?? "";
+            if (!int.TryParse(raw, out int val))
+                throw new FormatException();
+            if (val < min || val > max)
+                throw new ArgumentOutOfRangeException($"{label} peab olema {min}–{max}!");
+            return val;
+        }
+
+        // ── Вспомогательный ввод строки (без проверки) ───────────────
+        static string ReadInput(string prompt)
+        {
+            if (!string.IsNullOrEmpty(prompt))
+                Write(prompt, CLR_INPUT);
+            return Console.ReadLine()?.Trim() ?? "";
+        }
+
+        // ── Отрисовка UI-элементов ───────────────────────────────────
+        static void DrawHeader(string title, ConsoleColor color)
+        {
+            DrawLine();
+            Write($"  ◆ {title}\n", color);
+            DrawLine();
+        }
+
+        static void DrawLine()
+        {
+            Write("  " + new string('─', 44) + "\n", CLR_MUTED);
+        }
+
+        static void DrawBox(string[] lines, ConsoleColor color)
+        {
+            Console.WriteLine();
+            foreach (var line in lines)
+            {
+                Write("  " + line + "\n", color);
+            }
+            Console.WriteLine();
+        }
+
+        static void ShowSuccess(string msg)
+        {
+            Console.WriteLine();
+            Write($"  {msg}\n", CLR_SUCCESS);
+        }
+
+        static void ShowError(string msg)
+        {
+            Console.WriteLine();
+            Write($"  ✗  {msg}\n", CLR_ERROR);
+        }
+
+        static void Pause()
+        {
+            Write("\n  ", CLR_MUTED);
+            Write("Vajuta Enter, et jätkata...", CLR_MUTED);
+            Console.ReadLine();
+        }
+
+        static void Write(string text, ConsoleColor color)
+        {
+            if (color != default)
+                Console.ForegroundColor = color;
+            Console.Write(text);
+            Console.ResetColor();
+        }
+
+        static void WriteLn(string text, ConsoleColor color)
+        {
+            Write(text + "\n", color);
         }
     }
 }
