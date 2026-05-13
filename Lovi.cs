@@ -1,22 +1,38 @@
+using System;
+
 namespace ZooShop
 {
+    /// <summary>
+    /// TASE 3 — Lõvi (Panthera leo).
+    /// Lisab: territoorium, karjajuhi staatus.
+    /// </summary>
     public class Lovi : Imetaja
     {
-        public Lovi(string nimi, int vanus, int näljatase, string karvavärvus)
+        public string Territoorium  { get; set; } = "Määramata";
+        public bool   OnKarjajuht   { get; set; } = false;
+
+        public Lovi(string nimi, DateTime sünniaeg, Sugu sugu,
+                    int näljatase, string karvavärvus, string territoorium)
         {
-            Nimi = nimi;
-            Vanus = vanus;
-            Näljatase = näljatase;
-            Karvavärvus = karvavärvus;
+            Nimi          = nimi;
+            Sünniaeg      = sünniaeg;
+            Sugu          = sugu;
+            Näljatase     = näljatase;
+            Karvavärvus   = karvavärvus;
+            Territoorium  = territoorium;
         }
+
         public override void Söö()
         {
-            System.Console.WriteLine("Lõvi sööb liha.");
-            Näljatase += 20;
+            Console.WriteLine($"  🥩 {Nimi} sööb liha.");
+            Näljatase += 25;
         }
-        public void Raakida()
-        {
-            System.Console.WriteLine("Roar!");
-        }
+
+        public void Röögib() => Console.WriteLine($"  🦁 {Nimi}: ROAAR!");
+
+        public override string LiigiInfo()
+            => base.LiigiInfo() + "\n" +
+               $"  Territoorium : {Territoorium}\n" +
+               $"  Karjajuht   : {(OnKarjajuht ? "Jah" : "Ei")}";
     }
 }

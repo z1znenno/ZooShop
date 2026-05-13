@@ -1,18 +1,38 @@
+using System;
+
 namespace ZooShop
 {
+    /// <summary>
+    /// TASE 3 — Kotkas (Aquila chrysaetos).
+    /// Lisab: lennukiirus, pesa asukoht.
+    /// </summary>
     public class Kotkas : Lind
     {
-        public Kotkas(string nimi, int vanus, int näljatase, string tiivaulatus)
+        public double Lennukiirus  { get; set; }
+        public string PesaAsukoht { get; set; } = "Määramata";
+
+        public Kotkas(string nimi, DateTime sünniaeg, Sugu sugu,
+                      int näljatase, string tiivaulatus,
+                      double lennukiirus, string pesaAsukoht)
         {
-            Nimi = nimi;
-            Vanus = vanus;
-            Näljatase = näljatase;
-            Tiivaulatus = tiivaulatus;
+            Nimi         = nimi;
+            Sünniaeg     = sünniaeg;
+            Sugu         = sugu;
+            Näljatase    = näljatase;
+            Tiivaulatus  = tiivaulatus;
+            Lennukiirus  = lennukiirus;
+            PesaAsukoht  = pesaAsukoht;
         }
+
         public override void Söö()
         {
-            System.Console.WriteLine("Kotkas sööb kala.");
-            Näljatase += 20141;
+            Console.WriteLine($"  🐟 {Nimi} sukeldub ja püüab kala.");
+            Näljatase += 20;
         }
+
+        public override string LiigiInfo()
+            => base.LiigiInfo() + "\n" +
+               $"  Lennukiirus : {Lennukiirus} km/h\n" +
+               $"  Pesa        : {PesaAsukoht}";
     }
 }

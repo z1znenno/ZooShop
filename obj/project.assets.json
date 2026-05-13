@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\CSProjeckts\\ZooShop\\ZooShop.csproj",
+      "projectUniqueName": "C:\\Users\\User\\CSProjeckts\\TTHK\\ZooShop\\ZooShop.csproj",
       "projectName": "ZooShop",
-      "projectPath": "C:\\Users\\User\\CSProjeckts\\ZooShop\\ZooShop.csproj",
+      "projectPath": "C:\\Users\\User\\CSProjeckts\\TTHK\\ZooShop\\ZooShop.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\CSProjeckts\\ZooShop\\obj\\",
+      "outputPath": "C:\\Users\\User\\CSProjeckts\\TTHK\\ZooShop\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
